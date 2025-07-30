@@ -1,0 +1,10 @@
+name: VanillaXC
+version: '${project.version}'
+main: com.vanillaXC.VanillaXC
+api-version: '1.21'
+authors: [ XiaoPao45 ]
+description: 自定义聊天格式插件
+commands:
+  vxcreload:
+    description: 重载插件配置
+    usage: /vxcreload
