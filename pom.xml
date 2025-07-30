@@ -6,7 +6,7 @@
 
     <groupId>com</groupId>
     <artifactId>VanillaXC</artifactId>
-    <version>2.0.0</version>
+    <version>2.0.0-alpha.9</version>
     <packaging>jar</packaging>
 
     <name>VanillaXC</name>
