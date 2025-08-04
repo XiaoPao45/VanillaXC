@@ -1,2 +1,10 @@
 # 控制台前缀配置 (支持颜色代码)
 ConsolePrefix: "&8[&bVanillaXC&8] "
+
+# 聊天格式配置
+chat:
+  # 聊天消息格式 (支持 %player% 和 %message% 占位符)
+  format: "&8[&b%player%&8] &7➤ &r%message%"
+
+  # 是否允许玩家使用颜色代码 (&开头)
+  allow-colors: true
