@@ -1,0 +1,18 @@
+name: 'VanillaXC'
+version: '${project.version}'
+main: org.vanillaXC.VanillaXC
+api-version: '1.21'
+authors: [ XiaoPao45 ]
+description: 一个重构了2次的简易聊天插件
+
+commands:
+  vanillaxc-reload:
+    description: 重载VanillaXC配置文件
+    usage: /vanillaxc-reload
+    permission: vanillaxc.reload
+    permission-message: "§c你没有权限使用此命令！"
+
+permissions:
+  vanillaxc.reload:
+    description: 允许重载VanillaXC配置
+    default: op
