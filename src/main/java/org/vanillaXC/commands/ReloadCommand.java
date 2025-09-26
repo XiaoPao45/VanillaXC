@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import org.vanillaXC.VanillaXC;
 import org.vanillaXC.XLogger;
 import org.vanillaXC.chat.ChatFormat;
+import org.vanillaXC.chat.JoinMessage;
 
 public class ReloadCommand implements CommandExecutor {
 
@@ -16,18 +17,23 @@ public class ReloadCommand implements CommandExecutor {
         if (!sender.hasPermission("vanillaxc.reload")) {
             XLogger.error("你没有权限执行此命令！");
             if (sender instanceof Player) {
-                sender.sendMessage(XLogger.getGamePrefix() + "§c你没有权限执行此命令！");
+                sender.sendMessage("§c你没有权限执行此命令！");
             }
             return true;
         }
 
         try {
+            // 调用XLogger的重载方法
             XLogger.reloadConfig(VanillaXC.getInstance());
 
+            // 重载聊天格式配置
             ChatFormat.reload();
 
+            // 重载加入消息配置
+            JoinMessage.reload();
+
             if (sender instanceof Player) {
-                sender.sendMessage(XLogger.getGamePrefix() + "§a配置文件重载成功！");
+                sender.sendMessage("§a配置文件重载成功！");
             }
 
         } catch (Exception e) {
@@ -35,7 +41,7 @@ public class ReloadCommand implements CommandExecutor {
             XLogger.error(e);
 
             if (sender instanceof Player) {
-                sender.sendMessage(XLogger.getGamePrefix() + "§c重载配置文件时发生错误！");
+                sender.sendMessage("§c重载配置文件时发生错误！");
             }
         }
 

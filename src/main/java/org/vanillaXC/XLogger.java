@@ -32,7 +32,6 @@ public class XLogger {
             instance = new XLogger();
             instance.sender = plugin.getServer().getConsoleSender();
             loadConfigPrefix(plugin);
-            startFileWatchService(plugin);
         }
     }
 
@@ -45,72 +44,8 @@ public class XLogger {
         setGamePrefix(gamePrefixConfig);
         boolean debugMode = config.getBoolean("debug-mode", false);
         setDebug(debugMode);
-        boolean autoReloadConfig = config.getBoolean("auto-reload", false);
-        setAutoReload(autoReloadConfig);
     }
 
-    private static void startFileWatchService(@NotNull JavaPlugin plugin) {
-        if (!autoReload) {
-            debug("自动重载功能未启用");
-            return;
-        }
-
-        try {
-            watchService = FileSystems.getDefault().newWatchService();
-            Path configPath = plugin.getDataFolder().toPath();
-            configPath.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
-
-            watchThread = new Thread(() -> {
-                try {
-                    debug("开始监听配置文件变化...");
-                    while (!Thread.currentThread().isInterrupted()) {
-                        WatchKey key = watchService.take();
-                        for (WatchEvent<?> event : key.pollEvents()) {
-                            if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
-                                Path filename = (Path) event.context();
-                                if ("config.yml".equals(filename.toString())) {
-                                    long currentTime = System.currentTimeMillis();
-                                    if (currentTime - lastReloadTime.get() > RELOAD_COOLDOWN) {
-                                        lastReloadTime.set(currentTime);
-                                        Bukkit.getScheduler().runTask(plugin, () -> {
-                                           Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "vanillaxc-reload");
-                                        });
-                                    }
-                                }
-                            }
-                        }
-                        key.reset();
-                    }
-                } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                } catch (Exception e) {
-                    error("文件监听线程发生错误");
-                    error(e);
-                }
-            }, "VanillaXC-ConfigWatcher");
-
-            watchThread.setDaemon(true);
-            watchThread.start();
-
-        } catch (IOException e) {
-            error(e);
-        }
-    }
-
-    public static void stopFileWatchService() {
-        if (watchService != null) {
-            try {
-                watchService.close();
-            } catch (IOException e) {
-                error("关闭文件监听服务时发生错误");
-                error(e);
-            }
-        }
-        if (watchThread != null && watchThread.isAlive()) {
-            watchThread.interrupt();
-        }
-        debug("文件监听服务已停止");
-    }
 
     public static void reloadConfig(@NotNull JavaPlugin plugin) {
         checkInitialization();
@@ -124,14 +59,6 @@ public class XLogger {
         boolean debugMode = config.getBoolean("debug-mode", false);
         setDebug(debugMode);
         boolean autoReloadConfig = config.getBoolean("auto-reload", false);
-
-        if (autoReload != autoReloadConfig) {
-            setAutoReload(autoReloadConfig);
-            stopFileWatchService();
-            if (autoReloadConfig) {
-                startFileWatchService(plugin);
-            }
-        }
 
         info("配置文件重载完成");
     }
@@ -239,9 +166,5 @@ public class XLogger {
         if (instance == null) {
             throw new IllegalStateException("XLogger尚未初始化，请先调用initialize方法");
         }
-    }
-
-    public static void onDisable() {
-        stopFileWatchService();
     }
 }

@@ -10,8 +10,11 @@ game-prefix: "&bVanillaXC &8|"
 # 内置变量: %player%, %message%
 chat-format: "&f%player%: &7%message%"
 
+# 加入退出消息配置
+join-message:
+  enabled: true
+  join: "&8[&a+&8] &7%player%"
+  quit: "&8[&c-&8] &7%player%"
+
 # 调试模式
 debug-mode: false
-
-# 自动重载配置
-auto-reload: true

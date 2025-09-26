@@ -4,6 +4,7 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.vanillaXC.chat.ChatFormat;
 import org.vanillaXC.chat.ChatListener;
+import org.vanillaXC.chat.JoinMessage;
 import org.vanillaXC.commands.ReloadCommand;
 
 public final class VanillaXC extends JavaPlugin {
@@ -24,22 +25,22 @@ public final class VanillaXC extends JavaPlugin {
         registerListeners();
         registerCommands();
 
-        // banner
+        // banner横幅
         XLogger.info("                                                    ");
-        XLogger.info("&b__     __          _ _ _      __  __&3____       ");
-        XLogger.info("&b\\ \\   / /_ _ _ ___( ) | | __ _\\ \\/ /&3 ___|  ");
-        XLogger.info("&b \\ \\ / / _` | '_  | | | |/ _` |\\  /&3 |       ");
-        XLogger.info("&b  \\ V / (_| | | | | | | | (_| |/  \\&3 |___     ");
-        XLogger.info("&b   \\_/ \\__,_|_| |_|_|_|_|\\__,_/_/\\_\\&3____| ");
+        XLogger.info("&b__     __          _ _ _      __  __&3____        ");
+        XLogger.info("&b\\ \\   / /_ _ _ ___( ) | | __ _\\ \\/ /&3 ___|   ");
+        XLogger.info("&b \\ \\ / / _` | '_  | | | |/ _` |\\  /&3 |        ");
+        XLogger.info("&b  \\ V / (_| | | | | | | | (_| |/  \\&3 |___      ");
+        XLogger.info("&b   \\_/ \\__,_|_| |_|_|_|_|\\__,_/_/\\_\\&3____|  ");
         XLogger.info("                                                    ");
         XLogger.info("&bVanillaX&3C 已启用                                 ");
         XLogger.info("                                                    ");
+
     }
 
     @Override
     public void onDisable() {
         XLogger.info("VanillaXC 已禁用");
-        XLogger.onDisable();
     }
 
     public static VanillaXC getInstance() {
@@ -47,8 +48,8 @@ public final class VanillaXC extends JavaPlugin {
     }
 
     private void registerListeners() {
-        getServer().getPluginManager().registerEvents(new ChatListener(), this);
-        XLogger.debug("聊天监听器已注册");
+        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
+        getServer().getPluginManager().registerEvents(new JoinMessage(), this);
     }
 
     private void registerCommands() {
